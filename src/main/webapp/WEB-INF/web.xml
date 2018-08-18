@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>SpringMVC</display-name>
+  
+
+<!-- 加载sping容器，即配置文件 -->
+<!-- <context-param>
+	<param-name>contextConfigLocation</param-name>
+	通过通配符加载
+	<param-value>/WEB-INF/classes/springXML/applicationContext.xml,/WEB-INF/classes/springXML/applicationContext-*.xml</param-value>
+</context-param>
+
+<listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener> -->
+<!-- 验证码 -->
+<servlet>
+	<servlet-name>Kaptcha</servlet-name>
+	<servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+	<!-- 是否有边框 -->
+	<init-param>
+		<param-name>kaptcha.border</param-name>
+		<param-value>no</param-value>
+	</init-param>
+	<!-- 图片宽度 -->
+	<init-param>
+		<param-name>kaptcha.image.width</param-name>
+		<param-value>135</param-value>
+	</init-param>
+	<!-- 验证码规则 -->
+	<init-param>
+		<param-name>kaptcha.textproducer.char.string</param-name>
+		<param-value>ABCDEFGHIGKLMNOPQRSTUVWXYZ1234567890</param-value>
+	</init-param>
+	<!-- 字体是否有颜色 -->
+	<init-param>
+			<param-name>kaptcha.textproducer.font.color</param-name>
+			<param-value>red</param-value>
+	</init-param>
+	<!-- 图片高度 -->
+	<init-param>
+		<param-name>kaptcha.image.height</param-name>
+		<param-value>50</param-value>
+	</init-param>
+	<!-- 字体大小 -->
+	<init-param>
+			<param-name>kaptcha.textproducer.font.size</param-name>
+			<param-value>43</param-value>
+	</init-param>
+		<!-- 字符个数 -->
+	<init-param>
+			<param-name>kaptcha.textproducer.char.length</param-name>
+			<param-value>4</param-value>
+	</init-param>
+	<!-- 字体 -->
+	<init-param>
+			<param-name>kaptcha.textproducer.font.names</param-name>
+			<param-value>Arial</param-value>
+	</init-param>
+		<!-- 干扰线-->
+	<init-param>
+			<param-name>kaptcha.noise.color</param-name>
+			<param-value>black</param-value>
+	</init-param>
+</servlet>
+<servlet-mapping>
+	<servlet-name>Kaptcha</servlet-name>
+	<url-pattern>/Kaptcha</url-pattern>
+</servlet-mapping>
+
+  <!-- 首先在web.xml文件中配置 SpingMVC前端控制器 -->
+  <servlet>
+  	<servlet-name>spring-dispatcher</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<!-- DispatcherServlet初始化参数配置 -->
+  	<!-- 即配置Springmvc所要加载的配置文件（处理器映射器、适配器等） -->
+  	<!-- 如果不配置，则默认加载WEB-INF/ springmvc-servlet.xml -->
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:spring/spring-*.xml</param-value>
+  	</init-param>
+  </servlet>
+  <!-- 配置servlet-mapping -->
+  <servlet-mapping>
+  	<servlet-name>spring-dispatcher</servlet-name>
+  	<!-- 有两种配置方式 -->
+  		<!-- *.action 访问以.action结尾  由DispatcherServlet进行解析 -->
+  		<!-- /  访问地址都由 DispatcherServlet进行解析，对于静态文件（图片）配置不让DispatcherServlet解析，使用此方法可以实现RESTful风格的url-->
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

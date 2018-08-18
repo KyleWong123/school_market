@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+<!--         加載jdbc.properties中的內容 
+ -->       
+ 	 <context:property-placeholder location="classpath:jdbc.properties"/>  
+	<!-- c3p0连接池配置 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="maxPoolSize" value="30"></property>
+<!-- 		<property name="maxStatements" value="0"/>
+ -->		<property name="minPoolSize" value="10"></property>
+		<property name="autoCommitOnClose" value="false"></property>
+				<property name="acquireRetryAttempts" value="2"></property>
+		
+	</bean>
+	
+	<!--配置sqlSessionFactory  -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 加載mybatis的配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<!-- 扫描实体包，使用别名 -->
+		<property name="typeAliasesPackage" value="com.school_market.entity"></property>
+		<!-- 扫描sql配置文件 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+		<!-- 配置數據源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 配置mapper掃描器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!--掃描包路徑，如需掃描多個路徑，中間使用半角逗號隔開  -->
+		<property name="basePackage" value="com.school_market.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"></property>
+	</bean>
+</beans>
